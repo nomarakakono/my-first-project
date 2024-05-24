@@ -1,0 +1,32 @@
+body {
+  background-color: black;
+}
+
+.button {
+  background-color: rgb(95, 88, 88);
+  color: white;
+  font-size: large;
+  border-radius: 60px;
+  margin-right: 5px;
+  border: none;
+  height: 60px;
+  width: 60px;
+  cursor: pointer;
+}
+
+.yellow-button {
+  background-color: orange;
+  color: white;
+  font-size: large;
+  border-radius: 60px;
+  border: none;
+  height: 60px;
+  width: 60px;
+  cursor: pointer;
+}
+
+.calculation {
+  font-size: 29px;
+  color: white;
+  font-family: Aerial;
+}

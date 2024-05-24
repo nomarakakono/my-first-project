@@ -1,0 +1,131 @@
+html
+Copy
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tic Tac Toe</title>
+  <style>
+    .board {
+      display: flex;
+      flex-wrap: wrap;
+      width: 300px;
+    }
+
+    .cell {
+      border: 1px solid black;
+      width: 100px;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Tic Tac Toe</h1>
+  <div class="board"></div>
+  <script>
+    // Game state
+    let board = [
+      [null, null, null],
+      [null, null, null],
+      [null, null, null]
+    ];
+    let currentPlayer = "X";
+    let gameEnded = false;
+
+    // Create the game board
+    const boardContainer = document.querySelector(".board");
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        const cell = document.createElement("div");
+        cell.classList.add("cell");
+        cell.addEventListener("click", () => {
+          if (!gameEnded && !board[i][j]) {
+            cell.textContent = currentPlayer;
+            board[i][j] = currentPlayer;
+            checkWin();
+            currentPlayer = currentPlayer === "X" ? "O" : "X";
+            if (!gameEnded) {
+              computerMove();
+            }
+          }
+        });
+        boardContainer.appendChild(cell);
+      }
+    }
+
+    // Winning combinations
+    const winningCombinations = [
+      [[0, 0], [0, 1], [0, 2]],
+      [[1, 0], [1, 1], [1, 2]],
+      [[2, 0], [2, 1], [2, 2]],
+      [[0, 0], [1, 0], [2, 0]],
+      [[0, 1], [1, 1], [2, 1]],
+      [[0, 2], [1, 2], [2, 2]],
+      [[0, 0], [1, 1], [2, 2]],
+      [[0, 2], [1, 1], [2, 0]]
+    ];
+
+    // Check if the game has been won
+    function checkWin() {
+      for (let combo of winningCombinations) {
+        const [a, b, c] = combo;
+        const [aX, aY] = a;
+        const [bX, bY] = b;
+        const [cX, cY] = c;
+        if (
+          board[aX][aY] &&
+          board[aX][aY] === board[bX][bY] &&
+          board[aX][aY] === board[cX][cY]
+        ) {
+          endGame(board[aX][aY]);
+          break;
+        }
+      }
+      if (
+        board.flat().every((cell) => cell !== null) &&
+        !gameEnded
+      ) {
+        endGame("draw");
+      }
+    }
+
+    // End the game
+    function endGame(winner) {
+      gameEnded = true;
+      let message = "";
+      if (winner === "draw") {
+        message = "It's a draw!";
+      } else {
+        message = `Player ${winner} wins!`;
+      }
+      alert(message);
+    }
+
+    // Computer's move
+    function computerMove() {
+      const emptyCells = [];
+      for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+          if (!board[i][j]) {
+            emptyCells.push([i, j]);
+          }
+        }
+      }
+
+      if (emptyCells.length > 0) {
+        const randomIndex = Math.floor(Math.random() * emptyCells.length);
+        const [computerChoiceX, computerChoiceY] = emptyCells[randomIndex];
+        board[computerChoiceX][computerChoiceY] = currentPlayer;
+        const cell = boardContainer.children[3 * computerChoiceX + computerChoiceY];
+        cell.textContent = currentPlayer;
+        checkWin();
+        currentPlayer = currentPlayer === "X" ? "O" : "X";
+      }
+    }
+  </script>
+</body>
+</html>
